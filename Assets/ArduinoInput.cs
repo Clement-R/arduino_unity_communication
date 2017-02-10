@@ -9,8 +9,9 @@ public class ArduinoInput : MonoBehaviour {
     string usedPort = "COM5";
     SerialPort stream;
     string lastEvent = "";
+    string prevEvent = "";
 
-	void Start () {
+    void Start () {
         stream = new SerialPort(usedPort, 9600);
         stream.ReadTimeout = 50;
         stream.Open();
@@ -20,6 +21,13 @@ public class ArduinoInput : MonoBehaviour {
 
     void deb(string s) {
         lastEvent = s;
+    }
+
+    void Update() {
+        if(prevEvent != lastEvent) {
+            Debug.Log(lastEvent);
+        }
+        prevEvent = lastEvent;
     }
 	
     public IEnumerator AsynchronousReadFromArduino(Action<string> callback, Action fail = null, float timeout = float.PositiveInfinity) {
