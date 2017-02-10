@@ -8,23 +8,20 @@ public class ArduinoInput : MonoBehaviour {
     [SerializeField]
     string usedPort = "COM5";
     SerialPort stream;
+    string lastEvent = "";
 
 	void Start () {
         stream = new SerialPort(usedPort, 9600);
         stream.ReadTimeout = 50;
         stream.Open();
         
-        StartCoroutine(AsynchronousReadFromArduino((string s) => Debug.Log(s) ));
+        StartCoroutine(AsynchronousReadFromArduino((string s) => deb(s) ));
     }
 
     void deb(string s) {
-        Debug.Log(s);
-        Debug.Log("okay");
+        lastEvent = s;
     }
 	
-	void Update () {
-    }
-
     public IEnumerator AsynchronousReadFromArduino(Action<string> callback, Action fail = null, float timeout = float.PositiveInfinity) {
         DateTime initialTime = DateTime.Now;
         DateTime nowTime;
